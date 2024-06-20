@@ -1,18 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dungeon Explorer</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Simple Game</title>
 </head>
 <body>
-    <div id="game-container">
-        <div id="character"></div>
-        <div class="obstacle" style="top: 50px; left: 100px;"></div>
-        <div class="obstacle" style="top: 200px; left: 50px;"></div>
-        <div class="obstacle" style="top: 150px; left: 300px;"></div>
-    </div>
-    <script src="script.js"></script>
+    <h1>Simple Game</h1>
+    <p id="gameState">Loading game state...</p>
+    <button onclick="updateGameState()">Move Player</button>
+
+    <script>
+        // Colabの出力に表示されるURLをここに入力
+        const serverUrl = 'https://3ikm0bxf8i-496ff2e9c6d22116-5000-colab.googleusercontent.com/';
+
+        async function fetchGameState() {
+            const response = await fetch(`${serverUrl}/game_state`);
+            const gameState = await response.json();
+            document.getElementById('gameState').innerText = `Score: ${gameState.score}, Player Position: (${gameState.player_position.x}, ${gameState.player_position.y})`;
+        }
+
+        async function updateGameState() {
+            const response = await fetch(`${serverUrl}/update_state`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    score: Math.floor(Math.random() * 100),  // ランダムなスコアを設定
+                    player_position: { x: Math.random() * 100, y: Math.random() * 100 }  // ランダムな位置を設定
+                })
+            });
+            const result = await response.json();
+            console.log(result);
+            fetchGameState();
+        }
+
+        // 初期状態を取得
+        fetchGameState();
+    </script>
 </body>
 </html>
