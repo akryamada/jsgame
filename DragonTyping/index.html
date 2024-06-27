@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>都道府県タイピングゲーム</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .forest {
+            background: url('forest.jpg') no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .volcano {
+            background: url('volcano.jpg') no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .more-volcano {
+            background: url('more-volcano.jpg') no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        #country-name {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        #romanization {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        #timer {
+            margin-bottom: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        .matched {
+            color: green;
+        }
+        #enemy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        #enemy img {
+            width: 150px;
+            height: 150px;
+        }
+        .damage-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            color: rgb(191, 21, 194);
+            animation: slash 0.5s ease-in-out;
+        }
+        @keyframes slash {
+            0% { 
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5) rotate(20deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(2) rotate(40deg);
+            }
+        }
+        #victory-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 2em;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .fire-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('fire.png') no-repeat center center;
+            background-size: cover;
+            display: none;
+            animation: fire 0.5s ease-in-out;
+        }
+        @keyframes fire {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="timer">残り時間: 300秒</div>
+        <div id="mistake-counter">間違い: 0/10</div>
+        <div id="enemy">
+            <img src="dragon.png" alt="敵キャラクター">
+            <div id="enemy-hp">敵のHP: 1000</div>
+            <div id="damage-effect" class="damage-effect">-20</div>
+            <div id="fire-effect" class="fire-effect"></div>
+        </div>
+        <div id="country-name"></div>
+        <div id="romanization"></div>
+        <input type="text" id="answer">
+        <div id="result"></div>
+    </div>
+    <div id="victory-screen">
+        <p>勝利！</p>
+    </div>
+    <script>
+        const prefectures = {
+            "北海道": ["hokkaidou"],
+            "青森": ["aomori"],
+            "岩手": ["iwate"],
+            "宮城": ["miyagi"],
+            "秋田": ["akita"], 
+            "山形": ["yamagata"],
+            "福島": ["hukushima","hukusima"],
+            "茨城": ["ibaraki"],
+            "栃木": ["tochigi","totigi"],
+            "群馬": ["gunma","gunnma"], 
+            "埼玉": ["saitama"],
+            "千葉": ["chiba","tiba"],
+            "東京": ["toukyou"],
+            "神奈川": ["kanagawa"],
+            "新潟": ["niigata"], 
+            "富山": ["toyama"],
+            "石川": ["ishikawa","isikawa"], 
+            "福井": ["hukui","fukui"], 
+            "山梨": ["yamanashi","yamanasi"], 
+            "長野": ["nagano"], 
+            "岐阜": ["gifu","gihu"], 
+            "静岡": ["shizuoka","sizuoka"], 
+            "愛知": ["aichi","aiti"], 
+            "三重": ["mie"], 
+            "滋賀": ["shiga","siga"], 
+            "京都": ["kyouto","kixyouto"], 
+            "大阪": ["oosaka"], 
+            "兵庫": ["hyougo","hixyougo"], 
+            "奈良": ["nara"], 
+            "和歌山": ["wakayama"], 
+            "鳥取": ["tottori","toxtutori"], 
+            "島根": ["shimane","simane"], 
+            "岡山": ["okayama"], 
+            "広島": ["hiroshima","hirosima"], 
+            "山口": ["yamaguchi","yamaguti"], 
+            "徳島": ["tokushima","tokusima"], 
+            "香川": ["kagawa"], 
+            "愛媛": ["ehime"], 
+            "高知": ["kouchi","kouti"], 
+            "福岡": ["fukuoka","hukuoka"], 
+            "佐賀": ["saga"], 
+            "長崎": ["nagasaki"], 
+            "熊本": ["kumamoto"], 
+            "大分": ["ooita"], 
+            "宮崎": ["miyazaki"], 
+            "鹿児島": ["kagoshima","kagosima"], 
+            "沖縄": ["okinawa"]
+        };
+        let currentPrefecture;
+        let currentRomanizations; // 現在のお題のローマ字表記の配列
+        let timeLeft = 300; // 制限時間を300秒に設定
+        let enemyHP = 1000; // 敵のHPを1000に設定
+        let enemyCount = 1; // 現在の敵の数
+        let mistakeCount = 0; // 間違いの回数をカウント
+
+        window.onload = function() {
+            newPrefecture();
+            document.getElementById('answer').focus();
+            startTimer();
+            updateHP(); // HPの初期表示
+            document.getElementById('answer').addEventListener('keydown', validateInput);
+        };
+
+        function newPrefecture() {
+            const keys = Object.keys(prefectures);
+            const randomIndex = Math.floor(Math.random() * keys.length);
+            currentPrefecture = keys[randomIndex];
+            currentRomanizations = prefectures[currentPrefecture]; // 現在のお題のローマ字表記を配列で取得
+            document.getElementById('country-name').textContent = currentPrefecture;
+            document.getElementById('romanization').textContent = currentRomanizations.join(', ');
+            document.getElementById('answer').value = '';
+            document.getElementById('result').textContent = '';
+            updateRomanization(); // 初期表示を更新
+        }
+
+        function validateInput(event) {
+            const expected = currentRomanizations.map(r => r.toLowerCase());
+            const currentInput = document.getElementById('answer').value.toLowerCase();
+            const key = event.key.toLowerCase();
+
+            if (event.keyCode === 8 || event.keyCode === 46) { // バックスペースとデリートを許可
+                setTimeout(updateRomanization, 0);
+                return; // キープレスを許可
+            }
+
+            const isValid = expected.some(romanization => {
+                const nextChar = romanization.charAt(currentInput.length);
+                return key === nextChar;
+            });
+
+            if (!isValid) {
+                mistakeCount++;
+                updateMistakeCounter();
+                if (mistakeCount % 10 === 0) {
+                    timeLeft -= 10;
+                    document.getElementById('timer').textContent = `残り時間: ${timeLeft}秒`;
+                    showFireEffect();
+                }
+                event.preventDefault(); // キープレスを防ぐ
+            } else {
+                setTimeout(() => {
+                    updateRomanization();
+                    checkAnswer();
+                }, 0);
+            }
+        }
+        function updateMistakeCounter() {
+            document.getElementById('mistake-counter').textContent = `間違い: ${mistakeCount % 10}/10`;
+        }
+        function updateRomanization() {
+            const currentInput = document.getElementById('answer').value.toLowerCase();
+            const romanizationElement = document.getElementById('romanization');
+            romanizationElement.innerHTML = ''; // 初期化
+
+            currentRomanizations.forEach(romanization => {
+                const lowerRomanization = romanization.toLowerCase();
+                let matchedLength = 0;
+
+                for (let i = 0; i < currentInput.length; i++) {
+                    if (currentInput[i] !== lowerRomanization[i]) {
+                        break;
+                    }
+                    matchedLength++;
+                }
+
+                const matchedPart = romanization.slice(0, matchedLength);
+                const remainingPart = romanization.slice(matchedLength);
+
+                const spanMatched = document.createElement('span');
+                spanMatched.classList.add('matched');
+                spanMatched.textContent = matchedPart;
+
+                const spanRemaining = document.createElement('span');
+                spanRemaining.textContent = remainingPart;
+
+                const div = document.createElement('div');
+                div.appendChild(spanMatched);
+                div.appendChild(spanRemaining);
+
+                romanizationElement.appendChild(div);
+            });
+        }
+
+        function checkAnswer() {
+            const currentInput = document.getElementById('answer').value.toLowerCase();
+            const expected = currentRomanizations.map(r => r.toLowerCase());
+            if (expected.includes(currentInput)) {
+                const damage = calculateDamage(currentInput.length); // ダメージ量を計算
+                document.getElementById('result').textContent = '正解！';
+                showDamageEffect(damage); // ダメージエフェクトを表示
+                reduceHP(damage); // 正解したらHPを減らす
+                newPrefecture();
+            }
+        }
+
+        function calculateDamage(length) {
+            return length * 5; // 例: 文字数に5をかけた値をダメージ量とする
+        }
+
+        function showDamageEffect(damage) {
+            const damageEffect = document.getElementById('damage-effect');
+            damageEffect.textContent = `-${damage}`;
+            damageEffect.style.display = 'flex';
+            setTimeout(() => {
+                damageEffect.style.display = 'none';
+            }, 500);
+        }
+
+        function showFireEffect() {
+            const fireEffect = document.getElementById('fire-effect');
+            fireEffect.style.display = 'flex';
+            setTimeout(() => {
+                fireEffect.style.display = 'none';
+            }, 500);
+        }
+
+        function reduceHP(amount) {
+            enemyHP -= amount;
+            updateHP();
+            if (enemyHP <= 0) {
+                enemyCount++;
+                if (enemyCount <= 3) { // 例として3体の敵を設定
+                    resetEnemy();
+                } else {
+                    endGame("勝利！");
+                }
+            }
+        }
+
+        function updateHP() {
+            document.getElementById('enemy-hp').textContent = `敵のHP: ${enemyHP}`;
+        }
+
+        function resetEnemy() {
+            enemyHP = 1000; // 敵のHPをリセット
+            updateHP();
+            document.getElementById('result').textContent = `新しい敵が現れました！（${enemyCount}体目）`;
+
+            const enemyImage = document.getElementById('enemy').querySelector('img');
+            if (enemyCount === 2) {
+                enemyImage.src = 'dragon3.png'; // 二体目のドラゴン画像
+                document.body.className = 'volcano'; // 背景を火山に変更
+            } else if (enemyCount === 3) {
+                enemyImage.src = 'dragon2.png'; // 三体目のドラゴン画像
+                document.body.className = 'more-volcano'; // 背景をさらに火山に変更
+            }
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            const timerId = setInterval(() => {
+                timeLeft -= 1;
+                timerElement.textContent = `残り時間: ${timeLeft}秒`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    endGame("時間切れ！");
+                }
+            }, 1000);
+        }
+
+        function endGame(message) {
+            if (message === "勝利！") {
+                document.getElementById('victory-screen').style.display = 'flex';
+            } else {
+                alert(message);
+            }
+            document.getElementById('answer').disabled = true;
+        }
+    </script>
+</body>
+</html>
