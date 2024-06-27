@@ -1,0 +1,102 @@
+body, html {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.screen {
+    border: 10px solid #e6c200; /* 光度を下げた黄色 */
+    background-color: white;
+    padding: 20px;
+    width: 80%;
+    margin: 50px auto;
+    text-align: center;
+    display: none;
+    position: relative;
+    transition: all 0.5s ease;
+}
+
+#startScreen p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.rules-list {
+    text-align: left;
+    padding-left: 20px;
+    font-size: 18px;
+    margin: 10px auto;
+    width: 80%;
+}
+
+.foodPhase {
+    display: none;
+    margin-top: 20px;
+}
+
+button, .foodButton {
+    background-color: #e6c200; /* 光度を下げた黄色 */
+    color: black;
+    border: 2px solid #cccccc;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: block;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    transition: background-color 0.3s ease;
+}
+
+button:hover, .foodButton:hover {
+    background-color: #d4b000; /* 光度を下げた黄色 */
+}
+
+h1, h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center; /* 中央揃え */
+}
+
+#restartButton {
+    display: block;
+    margin-top: 30px;
+    font-weight: bold;
+    background-color: red;
+    color: white;
+}
+
+.selected {
+    border: 3px dashed green;
+}
+
+.adjectiveNoun {
+    font-size: 24px; /* 大きくする */
+    font-weight: bold;
+}
+
+/* いらないボタンと取り残しはないボタンに緑色を適用 */
+.foodButton.noNeed,
+.foodButton.noLeftover {
+    background-color: green;
+    color: white;
+}
+
+/* 結果画面の情報表示 */
+#resultScreen .result-info {
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+/* フードボタンのマージン設定 */
+.foodButton {
+    margin: 5px;
+}
+
+/* 結果画面のリストスタイルをリセット */
+#resultScreen ul {
+    list-style-type: none;
+    padding-left: 0;
+}

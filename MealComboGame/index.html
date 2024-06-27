@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Meal Price Game</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js"></script>
+</head>
+<body>
+<div id="startScreen" class="screen" style="display: block;">
+  <h1>学食定期を最大限活用するためのゲーム</h1>
+  <p>★ルール説明★</p>
+  <ol class="rules-list">
+    <li>神戸大学の学生食堂をモチーフとしたゲームです!</li>
+    <li>ごはん，おかず，汁物，副菜，および取り残したものを選ぶ，計５フェーズがあります!</li>
+    <li>各フェーズで一品ずつ商品を選択しましょう!</li>
+    <li>各フェーズでどれも選びたくない場合は「いらない」ボタンを押しましょう!</li>
+    <li>学食定期の上限は６５０円です!金額はオーバーすることもできますが，ちょうど使いきることができるように，献立を考えましょう!</li>
+    <li>もう一度ルール説明を見たいときはブラウザを再読み込みしてください!!</li>
+  </ol>
+  <button id="startButton">スタート</button>
+  <p>☆学食(定期)の豆知識☆</p>
+    <p>売店で良い組み合わせのジュースを5本買うと，650円ぴったりにできる!やってみて!!</p>
+    <p>生協の公式LINEから，食堂のメニューが分かるようになっています!!確認してみよう!!</p>
+    <p>生協の公式LINEで，メニューをトレーに追加ボタンを押すと，総カロリーが分かるよ!</p>
+    <p>生協の公式LINEを見ると，栄養バランスを考えたオススメの組み合わせが見られるよ!</p>
+</div>
+
+<div id="playScreen" class="screen" style="display: none;">
+  <!-- ごはんフェーズ -->
+  <div id="ricePhase" class="foodPhase" style="display: none;">
+    <h2>ごはんの大きさは？</h2>
+    <button class="foodButton" data-price="84">ごはんミニ 84円</button>
+    <button class="foodButton" data-price="105">ごはん小 105円</button>
+    <button class="foodButton" data-price="126">ごはん中 126円</button>
+    <button class="foodButton" data-price="147">ごはん大 147円</button>
+    <button class="foodButton" data-price="209">ごはん特大 209円</button>
+    <button class="foodButton" data-price="0">いらない</button>
+  </div>
+
+  <!-- おかずフェーズ -->
+  <div id="sideDishPhase" class="foodPhase" style="display: none;">
+    <h2>おかずを選ぼう！</h2>
+    <!-- ボタンはJavaScriptで動的に生成されます -->
+  </div>
+
+  <!-- 汁物フェーズ -->
+  <div id="soupPhase" class="foodPhase" style="display: none;">
+    <h2>汁物を選ぼう！</h2>
+    <button class="foodButton" data-price="44">みそ汁 44円</button>
+    <button class="foodButton" data-price="44">かきたま汁 44円</button>
+    <button class="foodButton" data-price="121">豚汁 121円</button>
+    <button class="foodButton" data-price="0">いらない</button>
+  </div>
+
+  <!-- 副菜フェーズ -->
+  <div id="sidePhase" class="foodPhase" style="display: none;">
+    <h2>副菜を選ぼう！</h2>
+    <!-- ボタンはJavaScriptで動的に生成されます -->
+  </div>
+
+  <!-- 取り残しフェーズ -->
+  <div id="leftoverPhase" class="foodPhase" style="display: none;">
+    <h2>取り残しはない？</h2>
+    <!-- 選択されていないアイテムが動的に表示されます -->
+  </div>
+  
+</div>
+
+<div id="resultScreen" class="screen" style="display: none;">
+  <h1>結果画面</h1>
+  <p id="playTimeDisplay"></p>
+  <p id="scoreDisplay"></p>
+  <button id="restartButton">リスタート</button>
+</div>
+
+</body>
+</html>
