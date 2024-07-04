@@ -203,7 +203,7 @@ function getLeftoverItems() {
     ...[
       { id: 'cucumberVinegar', name: 'きゅうりの酢の物', price: 49 },
       { id: 'macaroniSalad', name: '肉じゃがコロッケ', price: 121 },
-      { id: 'eggRoll', name: 'たまご焼き', price: 56 },
+      { id: 'eggRoll', name: 'たまご焼き', price: 66 },
       { id: 'cabbageSalt', name: 'ミニサラダ', price: 55 },
       { id: 'radishGrated', name: 'ハッシュポテト', price: 121 },
       { id: 'squidSalt', name: 'オクラ巣ごもり玉子', price: 99 },

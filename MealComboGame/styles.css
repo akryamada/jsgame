@@ -6,43 +6,25 @@ body, html {
 }
 
 .screen {
-    border: 10px solid #e6c200; /* 光度を下げた黄色 */
+    border: 2vw solid #e6c200; /* ビューポート幅に応じたボーダーサイズ */
     background-color: white;
-    padding: 20px;
-    width: 80%;
-    margin: 50px auto;
+    padding: 5vw;
+    width: 80vw;
+    margin: 10vw auto;
     text-align: center;
     display: none;
     position: relative;
     transition: all 0.5s ease;
 }
 
-#startScreen p {
-    font-size: 18px;
-    margin: 10px 0;
-}
-
-.rules-list {
-    text-align: left;
-    padding-left: 20px;
-    font-size: 18px;
-    margin: 10px auto;
-    width: 80%;
-}
-
-.foodPhase {
-    display: none;
-    margin-top: 20px;
-}
-
 button, .foodButton {
-    background-color: #e6c200; /* 光度を下げた黄色 */
+    background-color: #e6c200;
     color: black;
     border: 2px solid #cccccc;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 2vw 4vw;
+    font-size: 3vw;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 2vw;
     display: block;
     width: 90%;
     margin-left: auto;
@@ -51,13 +33,65 @@ button, .foodButton {
 }
 
 button:hover, .foodButton:hover {
-    background-color: #d4b000; /* 光度を下げた黄色 */
+    background-color: #d4b000;
 }
 
 h1, h2 {
     color: #333;
     margin-bottom: 20px;
-    text-align: center; /* 中央揃え */
+    text-align: center;
+}
+
+/* パソコン向けのスタイル */
+@media (min-width: 601px) {
+    .screen {
+        width: 60%;
+        padding: 20px;
+        margin: 50px auto;
+        border-width: 10px;
+    }
+
+    button, .foodButton {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
+    h1, h2 {
+        font-size: 2em;
+    }
+}
+
+/* スマホ向けスタイル */
+@media (max-width: 600px) {
+    .screen {
+        width: 95%;
+        margin: 20px auto;
+        padding: 10px;
+        border-width: 5px;
+    }
+
+    h1, h2 {
+        font-size: 1.5em;
+    }
+
+    button, .foodButton {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .rules-list {
+        font-size: 14px;
+        list-style-position: inside; /* ナンバリングと文字の間の隙間を埋める */
+    }
+}
+
+.rules-list {
+    text-align: left;
+    padding-left: 0;
+    font-size: 18px;
+    margin: 10px auto;
+    width: 80%;
+    list-style-position: inside; /* ナンバリングと文字の間の隙間を埋める */
 }
 
 #restartButton {
@@ -73,7 +107,7 @@ h1, h2 {
 }
 
 .adjectiveNoun {
-    font-size: 24px; /* 大きくする */
+    font-size: 24px;
     font-weight: bold;
 }
 
